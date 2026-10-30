@@ -1,0 +1,141 @@
+React Learning Plan: Build TaskFlow
+You’ll learn React by building a task manager app step by step. Each concept includes a concrete implementation task.
+
+:hammer_and_wrench: Setup
+npm create vite@latest taskflow -- --template react
+cd taskflow
+npm install
+npm run dev
+
+:large_blue_circle: Beginner
+1. JSX & Rendering
+Replace App.jsx with:
+A <div>
+
+An <h1>TaskFlow</h1>
+A hardcoded task list using JSX
+
+
+2. Props
+Create a <TaskItem> component that:
+
+Accepts text and done as props
+Displays task content
+
+
+3. useState
+Add:
+
+An input field
+A button
+On click:
+
+Add a new task to a tasks array using useState
+
+
+4. Event Handling
+Use onChange to update input state
+
+Use onClick to add a task
+
+
+5. Conditional Rendering
+
+If no tasks → show "No tasks yet!"
+Otherwise → render task list
+
+
+6. Lists & Keys
+Render tasks using .map()
+
+Add a unique key to each <TaskItem>
+
+
+:large_purple_circle: Intermediate
+7. useEffect
+
+Save tasks to localStorage on change
+Load tasks on initial render
+
+
+8. Lifting State Up
+Create <FilterBar>:
+Options: All / Active / Done
+
+Move filter state to App
+Share it between components
+
+
+9. Controlled Components
+
+Input value must always come from state
+No direct DOM control
+
+
+10. Custom Hooks
+Create:
+useLocalStorage(key, defaultValue)
+Handles saving/loading logic
+
+
+11. useContext
+Implement dark/light theme
+
+Store theme in ThemeContext
+Avoid prop drilling
+
+
+12. useReducer
+Replace multiple states with:
+taskReducer
+
+Actions: ADD, TOGGLE, DELETE
+Add:
+
+Undo feature using history stack
+
+
+:large_orange_circle: Advanced
+13. useRef & DOM Access
+
+Auto-focus input on load
+Refocus after adding a task
+
+
+14. useMemo & useCallback
+Memoize filtered tasks using useMemo
+
+Optimize handlers using useCallback
+
+
+15. Code Splitting & lazy()
+
+Create <Stats> component
+Load using:
+React.lazy()
+Wrap with <Suspense>
+
+
+16. Error Boundaries
+
+Create class-based ErrorBoundary
+Wrap task list to prevent full app crash
+
+
+17. Portals
+Build delete confirmation modal
+
+Use createPortal to render in document.body
+
+
+18. Compound Components Pattern
+Refactor <TaskItem> into:
+<Task>
+  <Task.Checkbox />
+  <Task.Label />
+  <Task.Actions />
+</Task>
+Enables flexible composition
+
+
+When your app is running on localhost, proceed concept by concept.
