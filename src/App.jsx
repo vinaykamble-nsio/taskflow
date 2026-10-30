@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TaskItem } from "./components/TaskItem";
 import { TaskForm } from "./components/TaskForm";
+import "./App.css";
 function App() {
   const [tasks, setTasks] = useState([
     {
@@ -16,6 +17,12 @@ function App() {
       priority: "Medium",
     },
   ]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const filteredTasks = tasks.filter(
+    (task) =>
+      task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
   return (
     <div className="App">
       <h1>Taskflow</h1>
@@ -25,8 +32,15 @@ function App() {
           setTasks([...tasks, newTask]);
         }}
       />
+      Search:{" "}
+      <input
+        type="text"
+        placeholder="Search tasks..."
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="search"
+      />
       <ol>
-        {tasks.map((task) => (
+        {filteredTasks.map((task) => (
           <TaskItem key={task.id} task={task} />
         ))}
       </ol>
