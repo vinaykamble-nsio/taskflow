@@ -1,6 +1,6 @@
 import "./TaskItem.css";
 
-export function TaskItem({ task }) {
+export function TaskItem({ task, handleDelete }) {
   return (
     <li className="task-item">
       <div className="task-header">
@@ -12,6 +12,8 @@ export function TaskItem({ task }) {
       </div>
 
       <p className="task-description">{task.description}</p>
+
+      <button onClick={handleDelete}>Delete</button>
     </li>
   );
 }
