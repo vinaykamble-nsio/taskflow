@@ -1,16 +1,21 @@
-import { useState, useEffect } from "react";
+import { useReducer, useState, useEffect } from "react";
+
 import { TaskItem } from "./components/TaskItem";
 import { TaskForm } from "./components/TaskForm";
 import { FilterBar } from "./components/FilterBar";
+import { taskReducer } from "./reducers/taskReducer";
 import { useTheme } from "./context/ThemeProvider";
+
 import "./App.css";
 
 function App() {
   const { theme, toggleTheme } = useTheme();
-  // Load tasks from localStorage
-  const [tasks, setTasks] = useState(() => {
+
+  // Initialize tasks from localStorage
+  const [tasks, dispatch] = useReducer(taskReducer, [], () => {
     try {
       const storedTasks = localStorage.getItem("tasks");
+
       return storedTasks ? JSON.parse(storedTasks) : [];
     } catch (error) {
       console.error("Error loading tasks:", error);
@@ -21,17 +26,41 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
 
-  // Save tasks whenever they change
+  // Persist tasks
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  // Filter tasks based on status
+  // Add task
+  const handleAddTask = (newTask) => {
+    dispatch({
+      type: "ADD_TASK",
+      payload: newTask,
+    });
+  };
+
+  // Delete task
+  const handleDeleteTask = (taskId) => {
+    dispatch({
+      type: "DELETE_TASK",
+      payload: taskId,
+    });
+  };
+
+  // Change status
+  const handleStatusChange = (taskId) => {
+    dispatch({
+      type: "CHANGE_STATUS",
+      payload: taskId,
+    });
+  };
+
+  // Filter tasks
   const handleFilter = (filter) => {
     setActiveFilter(filter);
   };
 
-  // Search and filter tasks together
+  // Search and filter
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch =
       task.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -44,40 +73,9 @@ function App() {
     return matchesSearch && matchesFilter;
   });
 
-  // Add new task
-  const handleAddTask = (newTask) => {
-    setTasks((prevTasks) => [...prevTasks, newTask]);
-  };
-
-  // Delete task
-  const handleDeleteTask = (taskId) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
-  };
-
-  // Change task status
-  const statusOrder = ["Pending", "In Progress", "Completed"];
-
-  const handleStatusChange = (taskId) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) => {
-        if (task.id === taskId) {
-          const currentIndex = statusOrder.indexOf(task.status);
-          const nextIndex = (currentIndex + 1) % statusOrder.length;
-
-          return {
-            ...task,
-            status: statusOrder[nextIndex],
-          };
-        }
-
-        return task;
-      }),
-    );
-  };
-
   return (
     <div className={`App ${theme}`}>
-      <h1>Taskflow</h1>
+      <h1 style={{ color: theme === "light" ? "#333" : "#fff" }}>Taskflow</h1>
       <p>Welcome to Taskflow!</p>
 
       <button className="theme-toggle" onClick={toggleTheme}>
@@ -109,6 +107,7 @@ function App() {
               task={task}
               handleDelete={() => handleDeleteTask(task.id)}
               handleStatusChange={() => handleStatusChange(task.id)}
+              counter={tasks.indexOf(task) + 1}
             />
           ))
         ) : (
