@@ -148,3 +148,44 @@
     padding: 8px 12px;
   }
 }
+/* Dark Mode Task Cards */
+.App.dark .task-item {
+  background: var(--card-color);
+  border-color: var(--border-color);
+}
+
+.App.dark .task-title {
+  color: var(--text-color);
+}
+
+.App.dark .task-description {
+  color: var(--muted-color);
+}
+
+/* Dark Mode Filter */
+.App.dark .filter-select {
+  background: var(--input-color);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.App.dark .filter-select option {
+  background: var(--card-color);
+  color: var(--text-color);
+}
+
+/* Dark Mode Search */
+.App.dark .search {
+  background: var(--input-color);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.App.dark .search-container label {
+  color: var(--text-color);
+}
+
+/* Empty Message */
+.App.dark .empty-message {
+  color: var(--muted-color);
+}

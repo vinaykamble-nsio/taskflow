@@ -102,3 +102,54 @@
     grid-column: span 1;
   }
 }
+
+/* Dark Mode - Task Form */
+.App.dark .task-form {
+  background: var(--card-color);
+  border-color: var(--border-color);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Labels */
+.App.dark .form-group label {
+  color: var(--text-color);
+}
+
+/* Input, Textarea and Select */
+.App.dark .form-group input,
+.App.dark .form-group textarea,
+.App.dark .form-group select {
+  background: var(--input-color);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+/* Placeholder */
+.App.dark .form-group input::placeholder,
+.App.dark .form-group textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* Select Options */
+.App.dark .form-group select option {
+  background: var(--card-color);
+  color: var(--text-color);
+}
+
+/* Input Focus */
+.App.dark .form-group input:focus,
+.App.dark .form-group textarea:focus,
+.App.dark .form-group select:focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+}
+
+/* Submit Button */
+.App.dark .submit-btn {
+  background: #6366f1;
+  color: #ffffff;
+}
+
+.App.dark .submit-btn:hover {
+  background: #4f46e5;
+}

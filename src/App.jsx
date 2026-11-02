@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { TaskItem } from "./components/TaskItem";
 import { TaskForm } from "./components/TaskForm";
 import { FilterBar } from "./components/FilterBar";
+import { useTheme } from "./context/ThemeProvider";
 import "./App.css";
 
 function App() {
+  const { theme, toggleTheme } = useTheme();
   // Load tasks from localStorage
   const [tasks, setTasks] = useState(() => {
     try {
@@ -74,9 +76,13 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className={`App ${theme}`}>
       <h1>Taskflow</h1>
       <p>Welcome to Taskflow!</p>
+
+      <button className="theme-toggle" onClick={toggleTheme}>
+        {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
+      </button>
 
       <TaskForm onSubmit={handleAddTask} />
 

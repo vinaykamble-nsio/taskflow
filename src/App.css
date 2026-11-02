@@ -1,3 +1,89 @@
+/* Light Theme */
+.App {
+  min-height: 100vh;
+  padding: 30px;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.App.light {
+  --bg-color: #f8fafc;
+  --card-color: #ffffff;
+  --text-color: #1f2937;
+  --muted-color: #4b5563;
+  --border-color: #e5e7eb;
+  --input-color: #ffffff;
+
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Dark Theme */
+.App.dark {
+  --bg-color: #111827;
+  --card-color: #1f2937;
+  --text-color: #f9fafb;
+  --muted-color: #d1d5db;
+  --border-color: #374151;
+  --input-color: #374151;
+
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.app-header h1 {
+  margin-bottom: 5px;
+}
+
+.app-header p {
+  color: var(--muted-color);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  padding: 10px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--card-color);
+  color: var(--text-color);
+  cursor: pointer;
+  font-weight: 600;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  opacity: 0.85;
+}
+
+/* Task List */
+.task-list {
+  padding: 0;
+  list-style: none;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .App {
+    padding: 16px;
+  }
+
+  .app-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
 .counter {
   font-size: 16px;
   padding: 5px 10px;
