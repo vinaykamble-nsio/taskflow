@@ -11,6 +11,7 @@ export const TaskForm = ({ onSubmit }) => {
       title: formData.get("title"),
       description: formData.get("description"),
       priority: formData.get("priority"),
+      status: "Pending",
     };
 
     onSubmit(newTask);

@@ -1,39 +1,76 @@
 import { useState, useEffect } from "react";
 import { TaskItem } from "./components/TaskItem";
 import { TaskForm } from "./components/TaskForm";
+import { FilterBar } from "./components/FilterBar";
 import "./App.css";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
+  // Load tasks from localStorage
+  const [tasks, setTasks] = useState(() => {
+    try {
+      const storedTasks = localStorage.getItem("tasks");
+      return storedTasks ? JSON.parse(storedTasks) : [];
+    } catch (error) {
+      console.error("Error loading tasks:", error);
+      return [];
+    }
+  });
+
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeFilter, setActiveFilter] = useState("all");
 
-  // Fix 1: Added a default empty string to handle the initial blank state safely
-  const filteredTasks = tasks.filter(
-    (task) =>
-      task.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      task.description?.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
-
-  // Fix 2: Dedicated effect to seamlessly save tasks to localStorage whenever they change
+  // Save tasks whenever they change
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  // Fix 3: Initial loading effect with an empty dependency array running exactly once
-  useEffect(() => {
-    const storedTasks = localStorage.getItem("tasks");
-    if (storedTasks) {
-      try {
-        setTasks(JSON.parse(storedTasks));
-      } catch (error) {
-        console.error("Error parsing tasks from localStorage:", error);
-      }
-    }
-  }, []);
+  // Filter tasks based on status
+  const handleFilter = (filter) => {
+    setActiveFilter(filter);
+  };
 
-  // Fix 4: Clean, direct function to completely remove a task by its ID
+  // Search and filter tasks together
+  const filteredTasks = tasks.filter((task) => {
+    const matchesSearch =
+      task.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesFilter =
+      activeFilter === "all" ||
+      task.status?.toLowerCase().replace(" ", "-") === activeFilter;
+
+    return matchesSearch && matchesFilter;
+  });
+
+  // Add new task
+  const handleAddTask = (newTask) => {
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+  };
+
+  // Delete task
   const handleDeleteTask = (taskId) => {
-    setTasks(tasks.filter((t) => t.id !== taskId));
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+  };
+
+  // Change task status
+  const statusOrder = ["Pending", "In Progress", "Completed"];
+
+  const handleStatusChange = (taskId) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => {
+        if (task.id === taskId) {
+          const currentIndex = statusOrder.indexOf(task.status);
+          const nextIndex = (currentIndex + 1) % statusOrder.length;
+
+          return {
+            ...task,
+            status: statusOrder[nextIndex],
+          };
+        }
+
+        return task;
+      }),
+    );
   };
 
   return (
@@ -41,10 +78,11 @@ function App() {
       <h1>Taskflow</h1>
       <p>Welcome to Taskflow!</p>
 
-      <TaskForm onSubmit={(newTask) => setTasks([...tasks, newTask])} />
+      <TaskForm onSubmit={handleAddTask} />
 
       <div className="search-container">
-        <label htmlFor="search-input">Search: </label>
+        <label htmlFor="search-input">Search:</label>
+
         <input
           id="search-input"
           type="text"
@@ -53,21 +91,22 @@ function App() {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search"
         />
+
+        <FilterBar filter={activeFilter} handleFilter={handleFilter} />
       </div>
 
       <ul style={{ listStyleType: "none", padding: 0 }}>
         {filteredTasks.length > 0 ? (
           filteredTasks.map((task) => (
-            <li key={task.id}>
-              {/* Fix 5: Pass a clean execution callback reference down to the child component */}
-              <TaskItem
-                task={task}
-                handleDelete={() => handleDeleteTask(task.id)}
-              />
-            </li>
+            <TaskItem
+              key={task.id}
+              task={task}
+              handleDelete={() => handleDeleteTask(task.id)}
+              handleStatusChange={() => handleStatusChange(task.id)}
+            />
           ))
         ) : (
-          <li>No tasks found.</li>
+          <li className="empty-message">No tasks found.</li>
         )}
       </ul>
     </div>

@@ -1,6 +1,6 @@
 import "./TaskItem.css";
 
-export function TaskItem({ task, handleDelete }) {
+export function TaskItem({ task, handleDelete, handleStatusChange }) {
   return (
     <li className="task-item">
       <div className="task-header">
@@ -12,8 +12,15 @@ export function TaskItem({ task, handleDelete }) {
       </div>
 
       <p className="task-description">{task.description}</p>
-
-      <button onClick={handleDelete}>Delete</button>
+      <div>
+        <button
+          onClick={handleStatusChange}
+          className={`status-btn ${task.status?.toLowerCase().replace(" ", "-")}`}
+        >
+          {task.status}
+        </button>
+        <button onClick={handleDelete}>Delete</button>
+      </div>
     </li>
   );
 }
