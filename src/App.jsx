@@ -1,27 +1,19 @@
-import { useReducer, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { TaskItem } from "./components/TaskItem";
 import { TaskForm } from "./components/TaskForm";
 import { FilterBar } from "./components/FilterBar";
-import { taskReducer } from "./reducers/taskReducer";
 import { useTheme } from "./context/ThemeProvider";
+import { useDispatch, useSelector } from "react-redux";
+import { addTask, deleteTask, changeStatus } from "./features/tasks/tasksSlice";
 
 import "./App.css";
 
 function App() {
   const { theme, toggleTheme } = useTheme();
-
+  const tasks = useSelector((state) => state.tasks);
+  const dispatch = useDispatch();
   // Initialize tasks from localStorage
-  const [tasks, dispatch] = useReducer(taskReducer, [], () => {
-    try {
-      const storedTasks = localStorage.getItem("tasks");
-
-      return storedTasks ? JSON.parse(storedTasks) : [];
-    } catch (error) {
-      console.error("Error loading tasks:", error);
-      return [];
-    }
-  });
 
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
@@ -30,30 +22,9 @@ function App() {
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
-
-  // Add task
-  const handleAddTask = (newTask) => {
-    dispatch({
-      type: "ADD_TASK",
-      payload: newTask,
-    });
-  };
-
-  // Delete task
-  const handleDeleteTask = (taskId) => {
-    dispatch({
-      type: "DELETE_TASK",
-      payload: taskId,
-    });
-  };
-
-  // Change status
-  const handleStatusChange = (taskId) => {
-    dispatch({
-      type: "CHANGE_STATUS",
-      payload: taskId,
-    });
-  };
+  const handleAddTask = (task) => dispatch(addTask(task));
+  const handleDeleteTask = (taskId) => dispatch(deleteTask(taskId));
+  const handleStatusChange = (taskId) => dispatch(changeStatus(taskId));
 
   // Filter tasks
   const handleFilter = (filter) => {

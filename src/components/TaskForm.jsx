@@ -1,15 +1,17 @@
 import "./TaskForm.css";
-
+import { useState } from "react";
+import { Input } from "./Input";
 export const TaskForm = ({ onSubmit }) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const handleSubmit = (event) => {
     event.preventDefault();
-
     const formData = new FormData(event.target);
 
     const newTask = {
       id: Date.now(),
-      title: formData.get("title"),
-      description: formData.get("description"),
+      title: title,
+      description: description,
       priority: formData.get("priority"),
       status: "Pending",
     };
@@ -24,24 +26,22 @@ export const TaskForm = ({ onSubmit }) => {
       <p className="form-subtitle">Add a task and organize your work.</p>
 
       <div className="form-group">
-        <label htmlFor="title">Task Title</label>
-        <input
+        <Input
+          title="Task Title"
           type="text"
-          id="title"
-          name="title"
           placeholder="Enter task title"
-          required
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
       </div>
 
       <div className="form-group">
-        <label htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          name="description"
+        <Input
+          title="Task Description"
+          type="text"
           placeholder="Describe your task..."
-          rows="4"
-          required
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
       </div>
 
